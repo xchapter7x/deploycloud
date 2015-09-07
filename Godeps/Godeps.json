@@ -1,0 +1,25 @@
+{
+	"ImportPath": "github.com/xchapter7x/deploycloud",
+	"GoVersion": "go1.2.1",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/google/go-github/github",
+			"Rev": "7277108aa3e8823e0e028f6c74aea2f4ce4a1b5a"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Rev": "547ef5ac979778feb2f760cdb5f4eae1a2207b86"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "db8e4de5b2d6653f66aea53094624468caad15d2"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "ad0128250e8fba646a92ca9129716e523d63ef9f"
+		}
+	]
+}
