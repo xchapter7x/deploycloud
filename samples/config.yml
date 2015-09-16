@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: myapp1
+  myapp1:
     deployments:
       - name: development
         url: api.pivotal.io
@@ -12,7 +12,7 @@ applications:
         org: myorg
         space: prodspace
         path: myapp1/production
-  - name: myotherapp
+  myotherapp:
     deployments:
       - name: dev
         url: api.other.pivotal.io
