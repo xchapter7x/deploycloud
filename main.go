@@ -1,47 +1,38 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 
-	"github.com/google/go-github/github"
-	"golang.org/x/oauth2"
-)
-
-type (
-	DeploymentConfig struct {
-		GithubToken        string
-		LocalManifestPath  string
-		DeploymentManifest *RemoteConfigFile
-		DeploymentTarget   *RemoteConfigFile
-	}
-	RemoteConfigFile struct {
-		GithubURL  string
-		GithubOrg  string
-		Repo       string
-		Branch     string
-		RemotePath string
-	}
-	DeploymentTarget struct {
-		URL              string
-		OrgName          string
-		SpaceName        string
-		CfUserEnvVarName string
-		CfPassEnvVarName string
-	}
+	"github.com/xchapter7x/deploycloud/remoteconfig"
 )
 
 func main() {
+	fmt.Println("let's show a sample flow")
 	token := os.Getenv("GH_TOKEN")
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
+	remoteconfig.DefaultConfigPath = "samples/config.yml"
+	configFetcher := &remoteconfig.ConfigFetcher{
+		GithubOauthToken: token,
+		GithubOrg:        "xchapter7x",
+		Repo:             "deploycloud",
+		Branch:           "master",
+		GithubURL:        remoteconfig.DefaultGithubURL,
+	}
+	configFetcher.UseOauthClient()
 
-	client := github.NewClient(tc)
-	req, _ := client.NewRequest("GET", "https://raw.github.com/xchapter7x/deploycloud/master/LICENSE", nil)
-	buf := new(bytes.Buffer)
-	client.Do(req, buf)
-	fmt.Println(buf.String())
+	if c, err := configFetcher.FetchConfig(); err == nil {
+		fmt.Println(c.ListApps())
+		fmt.Println(c.Applications["myapp1"].Deployments)
+
+		for _, v := range c.Applications {
+
+			for _, d := range v.Deployments {
+				fmt.Println(d.Name)
+				fmt.Println(d)
+			}
+		}
+
+	} else {
+		fmt.Println("error: ", err)
+	}
 }
