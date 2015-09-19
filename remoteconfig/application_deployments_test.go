@@ -2,6 +2,7 @@ package remoteconfig_test
 
 import (
 	"io/ioutil"
+	"sort"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -25,6 +26,8 @@ var _ = Describe("ApplicationDeployments", func() {
 
 			It("should return the list of apps contained in the config", func() {
 				appList := appDeployment.ListApps()
+				sort.Strings(controlAppList)
+				sort.Strings(appList)
 				Ω(appList).Should(Equal(controlAppList))
 			})
 		})

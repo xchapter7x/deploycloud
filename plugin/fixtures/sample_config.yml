@@ -1,0 +1,24 @@
+---
+applications:
+  myapp1:
+    deployments:
+      - name: development
+        url: api.pivotal.io
+        org: myorg
+        space: thespace
+        path: myapp1/development
+        push_cmd: push appname -i 2
+      - name: production
+        url: api.pivotal.io
+        org: myorg
+        space: prodspace
+        path: myapp1/production
+        push_cmd: push appname_prod -i 8
+  myotherapp:
+    deployments:
+      - name: dev
+        url: api.other.pivotal.io
+        org: otherorg
+        space: otherspace
+        path: myotherapp/development
+        push_cmd: push appname_dev -i 2

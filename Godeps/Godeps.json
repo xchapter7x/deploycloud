@@ -1,10 +1,15 @@
 {
 	"ImportPath": "github.com/xchapter7x/deploycloud",
-	"GoVersion": "go1.2.1",
+	"GoVersion": "go1.4.2",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
+		{
+			"ImportPath": "github.com/cloudfoundry/cli/plugin",
+			"Comment": "v6.12.3-18-gecdf2fe",
+			"Rev": "ecdf2feb1e7e96aa31970af2666781dd6f1f6441"
+		},
 		{
 			"ImportPath": "github.com/google/go-github/github",
 			"Rev": "7277108aa3e8823e0e028f6c74aea2f4ce4a1b5a"
@@ -19,7 +24,11 @@
 		},
 		{
 			"ImportPath": "golang.org/x/oauth2",
-			"Rev": "ad0128250e8fba646a92ca9129716e523d63ef9f"
+			"Rev": "9ecad5029bb3332276edfb7b23add78b0387a9f3"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
 		}
 	]
 }
