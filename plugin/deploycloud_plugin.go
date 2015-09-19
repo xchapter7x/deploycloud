@@ -5,6 +5,9 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strings"
+
+	"gopkg.in/yaml.v2"
 
 	"github.com/cloudfoundry/cli/plugin"
 	"github.com/xchapter7x/deploycloud/remoteconfig"
@@ -98,6 +101,23 @@ func (s *DeployCloudPlugin) performActionOnConfig(config *remoteconfig.Applicati
 
 	if *s.list {
 		s.listApps(config)
+
+	} else if *s.show != "" {
+		s.showDeployment(config, *s.show)
+	}
+}
+
+func (s *DeployCloudPlugin) showDeployment(config *remoteconfig.ApplicationDeployments, deployment string) {
+	d := strings.Split(deployment, ".")
+	appName := d[0]
+	deploymentName := d[1]
+
+	for _, v := range config.Applications[appName].Deployments {
+
+		if v.Name == deploymentName {
+			b, _ := yaml.Marshal(v)
+			Logger.Println(string(b[:]))
+		}
 	}
 }
 

@@ -89,5 +89,45 @@ var _ = Describe("DeployCloudPlugin", func() {
 				Ω(myLogger.PrintSpy).Should(Equal(controlPrint))
 			})
 		})
+
+		Context("when called with valid arguments to show deployment details in the config", func() {
+			var (
+				myLogger = new(FakeLogger)
+				dcp      *DeployCloudPlugin
+			)
+			BeforeEach(func() {
+				Logger = myLogger
+				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
+					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
+					config = &remoteconfig.ConfigFetcher{
+						GithubOauthToken: "abcdiasdlhdaglsihdgalsihdgalsidhg",
+						GithubOrg:        "ghorg",
+						Repo:             "myconfigrepo",
+						Branch:           "master",
+						GithubURL:        remoteconfig.DefaultGithubURL,
+						ClientRepo:       &fakes.GithubClientFake{FileBytes: bytes.NewBuffer(fileBytes)},
+					}
+					return
+				}
+				dcp = new(DeployCloudPlugin)
+				dcp.Run(cliConn, []string{
+					"-show", "myapp1.development",
+					"-org", "asdf",
+					"-repo", "asdf",
+					"-branch", "asdf",
+					"-url", "asdf",
+					"-token", "asdf",
+				})
+			})
+
+			It("then it should show the details of the given app deployment", func() {
+				controlPrint := []string{
+					"[name: development\nurl: api.pivotal.io\nspace: thespace\norg: myorg\npath: myapp1/development\npush_cmd: push appname -i 2\n]",
+				}
+				sort.Strings(myLogger.PrintSpy)
+				sort.Strings(controlPrint)
+				Ω(myLogger.PrintSpy).Should(Equal(controlPrint))
+			})
+		})
 	})
 })
