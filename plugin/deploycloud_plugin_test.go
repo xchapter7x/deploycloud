@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"sort"
 
 	cffakes "github.com/cloudfoundry/cli/plugin/fakes"
@@ -28,7 +29,7 @@ func (s *FakeLogger) Println(p ...interface{}) {
 
 var _ = Describe("DeployCloudPlugin", func() {
 	var (
-		cliConn *cffakes.FakeCliConnection
+		cliConn = new(cffakes.FakeCliConnection)
 	)
 
 	Describe("given .Run()", func() {
@@ -75,6 +76,8 @@ var _ = Describe("DeployCloudPlugin", func() {
 					"-branch", "asdf",
 					"-url", "asdf",
 					"-token", "asdf",
+					"-cfuser", "asdf",
+					"-cfpass", "asdfasdf",
 				})
 			})
 
@@ -117,6 +120,8 @@ var _ = Describe("DeployCloudPlugin", func() {
 					"-branch", "asdf",
 					"-url", "asdf",
 					"-token", "asdf",
+					"-cfuser", "asdf",
+					"-cfpass", "asdfasdf",
 				})
 			})
 
@@ -127,6 +132,67 @@ var _ = Describe("DeployCloudPlugin", func() {
 				sort.Strings(myLogger.PrintSpy)
 				sort.Strings(controlPrint)
 				Ω(myLogger.PrintSpy).Should(Equal(controlPrint))
+			})
+		})
+
+		Context("when called with valid arguments to run deployment", func() {
+			var (
+				myLogger = new(FakeLogger)
+				dcp      *DeployCloudPlugin
+			)
+			BeforeEach(func() {
+				cliConn = new(cffakes.FakeCliConnection)
+				Logger = myLogger
+				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
+					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
+					config = &remoteconfig.ConfigFetcher{
+						GithubOauthToken: "abcdiasdlhdaglsihdgalsihdgalsidhg",
+						GithubOrg:        "ghorg",
+						Repo:             "myconfigrepo",
+						Branch:           "master",
+						GithubURL:        remoteconfig.DefaultGithubURL,
+						ClientRepo:       &fakes.GithubClientFake{FileBytes: bytes.NewBuffer(fileBytes)},
+					}
+					return
+				}
+				dcp = new(DeployCloudPlugin)
+				dcp.Run(cliConn, []string{
+					"-run", "myapp1.development",
+					"-org", "asdf",
+					"-repo", "asdf",
+					"-branch", "asdf",
+					"-url", "asdf",
+					"-token", "asdf",
+					"-cfuser", "asdf",
+					"-cfpass", "asdfasdf",
+				})
+			})
+
+			AfterEach(func() {
+				os.Remove("development")
+			})
+
+			It("then it should login and target the proper cf foundation", func() {
+				Ω(dcp.Errors).Should(BeEmpty())
+				args := cliConn.CliCommandArgsForCall(0)
+				Ω(args).Should(Equal([]string{"login", "-a", "api.pivotal.io", "-u", "asdf", "-p", "asdfasdf", "-o", "myorg", "-s", "thespace"}))
+			})
+
+			It("then it should run the configured push command w/ added manifest flag and path", func() {
+				Ω(dcp.Errors).Should(BeEmpty())
+				args := cliConn.CliCommandArgsForCall(1)
+				Ω(args).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
+			})
+
+			It("then it should login and execute the push command", func() {
+				Ω(dcp.Errors).Should(BeEmpty())
+				Ω(cliConn.CliCommandCallCount()).Should(Equal(2))
+			})
+
+			It("then it should download the remote manifest file", func() {
+				_, err := os.Stat("development")
+				Ω(dcp.Errors).Should(BeEmpty())
+				Ω(err).ShouldNot(HaveOccurred())
 			})
 		})
 	})

@@ -7,12 +7,15 @@ import (
 )
 
 type (
+	//ApplicationDeployments - the root object for a config.yml
 	ApplicationDeployments struct {
 		Applications map[string]AppConfig
 	}
+	//AppConfig - a config object for a single app
 	AppConfig struct {
 		Deployments []Deployment
 	}
+	//Deployment - a deployment object
 	Deployment struct {
 		Name    string
 		URL     string
@@ -21,6 +24,7 @@ type (
 		Path    string
 		PushCmd string `yaml:"push_cmd"`
 	}
+	//ConfigFetcher - an object that can fetch remote config files
 	ConfigFetcher struct {
 		GithubOauthToken string
 		ClientRepo       ghClientDoer
