@@ -141,12 +141,18 @@ var _ = Describe("DeployCloudPlugin", func() {
 
 		Context("when called with valid arguments to run deployment", func() {
 			var (
-				myLogger = new(FakeLogger)
-				dcp      *DeployCloudPlugin
+				myLogger      = new(FakeLogger)
+				dcp           *DeployCloudPlugin
+				fakeCmdRunner *fakes.FakeCmdRunner
 			)
 			BeforeEach(func() {
 				cliConn = new(cffakes.FakeCliConnection)
 				Logger = myLogger
+				MakeCmdRunner = func(args ...string) CmdRunner {
+					fakeCmdRunner = new(fakes.FakeCmdRunner)
+					fakeCmdRunner.CmdSpy = args
+					return fakeCmdRunner
+				}
 				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
 					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
 					config = &remoteconfig.ConfigFetcher{
@@ -185,13 +191,14 @@ var _ = Describe("DeployCloudPlugin", func() {
 
 			It("then it should run the configured push command w/ added manifest flag and path", func() {
 				Ω(dcp.Errors).Should(BeEmpty())
-				args := cliConn.CliCommandArgsForCall(1)
-				Ω(args).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
+				args := fakeCmdRunner.CmdSpy
+				Ω(args[1:]).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
 			})
 
 			It("then it should login and execute the push command", func() {
 				Ω(dcp.Errors).Should(BeEmpty())
-				Ω(cliConn.CliCommandCallCount()).Should(Equal(2))
+				Ω(cliConn.CliCommandCallCount()).Should(Equal(1))
+				Ω(fakeCmdRunner.RunSpy).Should(Equal(1))
 			})
 
 			It("then it should download the remote manifest file", func() {

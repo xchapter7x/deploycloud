@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -42,9 +43,18 @@ var (
 		configFetcher.UseOauthClient()
 		return
 	}
+	MakeCmdRunner = func(args ...string) CmdRunner {
+		runner := exec.Command(args[0], args[1:]...)
+		runner.Stdout = os.Stdout
+		runner.Stderr = os.Stderr
+		return runner
+	}
 )
 
 type (
+	CmdRunner interface {
+		Run() error
+	}
 	logger interface {
 		Fatalln(...interface{})
 		Println(...interface{})
@@ -162,12 +172,10 @@ func (s *DeployCloudPlugin) cfLogin(deploymentInfo remoteconfig.Deployment) {
 
 func (s *DeployCloudPlugin) cfDeploy(deploymentInfo remoteconfig.Deployment) {
 	args := strings.Split(deploymentInfo.PushCmd, " ")
+	args = append([]string{os.Args[0]}, args...)
 	args = append(args, "-f", deploymentInfo.Name)
-	origArgs := os.Args
-	os.Args = args
-	defer func() { os.Args = origArgs }()
 
-	if _, err := s.conn.CliCommand(args...); err != nil {
+	if err := MakeCmdRunner(args...).Run(); err != nil {
 		s.appendError(err)
 	}
 }
