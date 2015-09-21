@@ -46,7 +46,7 @@ var _ = Describe("DeployCloudPlugin", func() {
 
 			It("then it should print an error message", func() {
 				Ω(dcp.Errors).ShouldNot(BeEmpty())
-				Ω(dcp.Errors[0]).Should(Equal(ErrInvalidArgs))
+				Ω(dcp.Errors[1]).Should(Equal(ErrInvalidArgs))
 			})
 		})
 		Context("when called with valid arguments to list apps in the config", func() {

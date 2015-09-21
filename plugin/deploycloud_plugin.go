@@ -208,15 +208,22 @@ func (s *DeployCloudPlugin) appendError(e error) {
 }
 
 func (s *DeployCloudPlugin) validArgs() bool {
-	return (*s.configFile != "" &&
-		*s.org != "" &&
-		*s.repo != "" &&
-		*s.branch != "" &&
-		*s.cfuser != "" &&
-		*s.cfpass != "" &&
-		*s.url != "" &&
-		*s.token != "" &&
+	return (s.hasFlag(*s.configFile, "configFile") &&
+		s.hasFlag(*s.org, "org") &&
+		s.hasFlag(*s.repo, "repo") &&
+		s.hasFlag(*s.branch, "branch") &&
+		s.hasFlag(*s.cfuser, "cfuser") &&
+		s.hasFlag(*s.cfpass, "cfpass") &&
+		s.hasFlag(*s.url, "url") &&
+		s.hasFlag(*s.token, "token") &&
 		(*s.list || *s.run != "" || *s.show != ""))
+}
+
+func (s *DeployCloudPlugin) hasFlag(f string, name string) (r bool) {
+	if r = (f != ""); r == false {
+		s.appendError(errors.New(fmt.Sprint("Invalid flag: ", name)))
+	}
+	return
 }
 
 func (s *DeployCloudPlugin) fetch(filePath string) (buf *bytes.Buffer, err error) {
