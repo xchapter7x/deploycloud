@@ -31,24 +31,21 @@ $ cf cloud-deploy --show myapp.development --org xchapter7x --repo deploycloud -
 $ cf cloud-deploy --run myapp.development --org xchapter7x --repo deploycloud --token <ghtoken> --cfuser <myuser> --cfpass <mypass>
 ```
 
-**Env Var powered**
-### by setting the following env vars you can avoid the need to pass them into the cli
+## Env Var powered
+**by setting the following env vars you can avoid the need to pass them into the cli**
 ```
-	//TokenEnvName - env var name to store your github oauth token
-  GH_TOKEN
-	//CFUserEnvName - env var name to store your cf user
-  CF_USER
-	//CFPassEnvName - env var name to store your cf user's password
-	CF_PASS
+`GH_TOKEN` - env var name to store your github oauth token
+`CF_USER` - env var name to store your cf user
+`CF_PASS` - env var name to store your cf user's password
 ```
 
-**Repo Structure**
-### By default the plugin will look for a `config.yml` file in the root of the given repo
-### You can overwrite this default by passing the `--config` flag to the plugin with the relative path of the config in the repo
+## Repo Structure
+**By default the plugin will look for a `config.yml` file in the root of the given repo.**
+**You can overwrite this default by passing the `--config` flag to the plugin with the relative path of the config in the repo**
 
-**Config file Structure**
+## Config file Structure
 
-###Sample:
+**Sample:**
 ```
 ---
 applications:
