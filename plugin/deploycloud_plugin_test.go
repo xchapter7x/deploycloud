@@ -192,7 +192,7 @@ var _ = Describe("DeployCloudPlugin", func() {
 			It("then it should run the configured push command w/ added manifest flag and path", func() {
 				Ω(dcp.Errors).Should(BeEmpty())
 				args := fakeCmdRunner.CmdSpy
-				Ω(args[1:]).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
+				Ω(args).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
 			})
 
 			It("then it should login and execute the push command", func() {

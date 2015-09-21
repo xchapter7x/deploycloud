@@ -172,7 +172,6 @@ func (s *DeployCloudPlugin) cfLogin(deploymentInfo remoteconfig.Deployment) {
 
 func (s *DeployCloudPlugin) cfDeploy(deploymentInfo remoteconfig.Deployment) {
 	args := strings.Split(deploymentInfo.PushCmd, " ")
-	args = append([]string{os.Args[0]}, args...)
 	args = append(args, "-f", deploymentInfo.Name)
 
 	if err := MakeCmdRunner(args...).Run(); err != nil {
