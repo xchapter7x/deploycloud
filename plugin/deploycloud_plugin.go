@@ -82,7 +82,6 @@ func (s *DeployCloudPlugin) GetMetadata() plugin.PluginMetadata {
 
 //Run - cf cli required Run method
 func (s *DeployCloudPlugin) Run(cliConnection plugin.CliConnection, args []string) {
-	args = args[1:]
 	fs := new(flag.FlagSet)
 	s.conn = cliConnection
 	s.list = fs.Bool("list", false, "list apps available in config file")
@@ -96,7 +95,7 @@ func (s *DeployCloudPlugin) Run(cliConnection plugin.CliConnection, args []strin
 	s.token = fs.String("token", os.Getenv(TokenEnvName), "the oauth token for your github account (uses GH_TOKEN Env var by default)")
 	s.cfuser = fs.String("cfuser", os.Getenv(CFUserEnvName), "the cf username to use when logging in to the deployment target")
 	s.cfpass = fs.String("cfpass", os.Getenv(CFPassEnvName), "the cf user's password to use when logging in to the deployment target")
-	fs.Parse(args)
+	fs.Parse(args[1:])
 	s.execute()
 	s.errorOutput()
 }
@@ -164,6 +163,9 @@ func (s *DeployCloudPlugin) cfLogin(deploymentInfo remoteconfig.Deployment) {
 func (s *DeployCloudPlugin) cfDeploy(deploymentInfo remoteconfig.Deployment) {
 	args := strings.Split(deploymentInfo.PushCmd, " ")
 	args = append(args, "-f", deploymentInfo.Name)
+	origArgs := os.Args
+	os.Args = args
+	defer func() { os.Args = origArgs }()
 
 	if _, err := s.conn.CliCommand(args...); err != nil {
 		s.appendError(err)
