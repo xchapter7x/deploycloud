@@ -41,7 +41,9 @@ var _ = Describe("DeployCloudPlugin", func() {
 			BeforeEach(func() {
 				Logger = myLogger
 				dcp = new(DeployCloudPlugin)
-				dcp.Run(cliConn, []string{})
+				dcp.Run(cliConn, []string{
+					"cloud-deploy",
+				})
 			})
 
 			It("then it should print an error message", func() {
@@ -70,6 +72,7 @@ var _ = Describe("DeployCloudPlugin", func() {
 				}
 				dcp = new(DeployCloudPlugin)
 				dcp.Run(cliConn, []string{
+					"cloud-deploy",
 					"-list",
 					"-org", "asdf",
 					"-repo", "asdf",
@@ -114,6 +117,7 @@ var _ = Describe("DeployCloudPlugin", func() {
 				}
 				dcp = new(DeployCloudPlugin)
 				dcp.Run(cliConn, []string{
+					"cloud-deploy",
 					"-show", "myapp1.development",
 					"-org", "asdf",
 					"-repo", "asdf",
@@ -157,6 +161,7 @@ var _ = Describe("DeployCloudPlugin", func() {
 				}
 				dcp = new(DeployCloudPlugin)
 				dcp.Run(cliConn, []string{
+					"cloud-deploy",
 					"-run", "myapp1.development",
 					"-org", "asdf",
 					"-repo", "asdf",

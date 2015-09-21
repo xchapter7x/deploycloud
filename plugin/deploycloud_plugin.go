@@ -82,6 +82,7 @@ func (s *DeployCloudPlugin) GetMetadata() plugin.PluginMetadata {
 
 //Run - cf cli required Run method
 func (s *DeployCloudPlugin) Run(cliConnection plugin.CliConnection, args []string) {
+	args = args[1:]
 	fs := new(flag.FlagSet)
 	s.conn = cliConnection
 	s.list = fs.Bool("list", false, "list apps available in config file")
