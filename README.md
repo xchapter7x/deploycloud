@@ -39,17 +39,32 @@ $ go get github.com/xchapter7x/deploycloud
 $ cf install-plugin $env:GOPATH/bin/deploycloud.exe
 ```
 
-**Usage**
+## Usage
+**available args**
+```
+	--list "list apps available in config file (defaults to false)"
+	--run "run the selected deployment (takes a string value)"
+	--show "show the selected deployment's details (takes a string value)"
+	--config "path to remote config file (takes a string value & has default `config.yml`"
+	--org "the target org in github (takes a string value)"
+	--repo "the target repo in github (takes a string value)"
+	--branch "the target branch in your github repo (takes a string value)"
+	--url "the target github base url (takes a string value & defaults to https://raw.github.com/)"
+	--token "the oauth token for your github account (uses GH_TOKEN Env var by default)"
+	--cfuser "the cf username to use when logging in to the deployment target (uses CF_USER Env var by default)"
+	--cfpass "the cf user's password to use when logging in to the deployment target (uses CF_PASS Env var by default)"
+```
+
+**sample calls**
 ```
 #List available apps to deploy
-$ cf cloud-deploy --list --org xchapter7x --repo deploycloud --token <ghtoken> --cfuser <myuser> --cfpass <mypass>
-
+$ cf cloud-deploy --list --org xchapter7x --repo deploycloud --branch master
 
 #Show details of deployment
-$ cf cloud-deploy --show myapp.development --org xchapter7x --repo deploycloud --token <ghtoken> --cfuser <myuser> --cfpass <mypass>
+$ cf cloud-deploy --show myapp.development --org xchapter7x --repo deploycloud --branch master
 
 #Run an available application deployment
-$ cf cloud-deploy --run myapp.development --org xchapter7x --repo deploycloud --token <ghtoken> --cfuser <myuser> --cfpass <mypass>
+$ cf cloud-deploy --run myapp.development --org xchapter7x --repo deploycloud --branch master
 ```
 
 ## Env Var powered
