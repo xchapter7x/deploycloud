@@ -1,0 +1,2 @@
+GOPATH=$(pwd)/Godeps/_workspace/:$GOPATH gox -verbose -output="build/{{.Dir}}_{{.OS}}_{{.Arch}}" -osarch="linux/amd64 windows/amd64 darwin/amd64" .
+openssl sha1 build/*
