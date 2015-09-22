@@ -4,15 +4,36 @@
 
 [![wercker status](https://app.wercker.com/status/9a6553ba12248db71c8e452c2723e6c3/s/master "wercker status")](https://app.wercker.com/project/bykey/9a6553ba12248db71c8e452c2723e6c3)
 
-## installation
+## installation from release binaries
 
-**On *nix**
+**On OSX using release binaries**
+```
+$ wget -O $GOPATH/bin/deploycloud https://github.com/xchapter7x/deploycloud/releases/download/v1.0.1/deploycloud_darwin_amd64
+$ cf install-plugin $GOPATH/bin/deploycloud
+```
+
+**On Linux using release binaries**
+```
+$ wget -O $GOPATH/bin/deploycloud https://github.com/xchapter7x/deploycloud/releases/download/v1.0.1/deploycloud_linux_amd64
+$ cf install-plugin $GOPATH/bin/deploycloud
+```
+
+**On Windows using release binaries**
+```
+#in your browser download https://github.com/xchapter7x/deploycloud/releases/download/v1.0.1/deploycloud_windows_amd64.exe and place it in $GOPATH/bin/deploycloud.exe
+
+$ cf install-plugin $env:GOPATH/bin/deploycloud.exe
+```
+
+## installation using go get
+
+**On *nix using go get**
 ```
 $ go get github.com/xchapter7x/deploycloud
 $ cf install-plugin $GOPATH/bin/deploycloud
 ```
 
-**On Windows**
+**On Windows using go get**
 ```
 $ go get github.com/xchapter7x/deploycloud
 $ cf install-plugin $env:GOPATH/bin/deploycloud.exe
@@ -59,7 +80,7 @@ applications:
         org: myorg # org to target during push
         space: thespace # space to target during push
         path: myapp1/development #path to desired manifest (relative to the root of this repo)
-        push_cmd: push appname -i 2 #push command to execute (note: the above manifest will be used via a added `-f`, so dont add it here)
+        push_cmd: cf push appname -i 2 #push command to execute (note: the above manifest will be used via a added `-f`, so dont add it here)
       
       # another deployment definition for the myapp1 application
       - name: production
@@ -67,7 +88,7 @@ applications:
         org: myorg
         space: prodspace
         path: myapp1/production
-        push_cmd: push appname_prod -i 8
+        push_cmd: cf push-zdd appname_prod -i 8
   myotherapp:
     deployments:
       - name: dev
@@ -75,5 +96,5 @@ applications:
         org: otherorg
         space: otherspace
         path: myotherapp/development
-        push_cmd: push appname_dev -i 2
+        push_cmd: cf push appname_dev -i 2
 ```
