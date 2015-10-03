@@ -6,75 +6,13 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
-	"os/exec"
 	"strings"
 
 	"gopkg.in/yaml.v2"
 
 	"github.com/cloudfoundry/cli/plugin"
 	"github.com/xchapter7x/deploycloud/remoteconfig"
-)
-
-const (
-	//TokenEnvName - env var name to store your github oauth token
-	TokenEnvName = "GH_TOKEN"
-	//CFUserEnvName - env var name to store your cf user
-	CFUserEnvName = "CF_USER"
-	//CFPassEnvName - env var name to store your cf user's password
-	CFPassEnvName = "CF_PASS"
-)
-
-var (
-	//ErrInvalidArgs - invalid argument error
-	ErrInvalidArgs = errors.New("invalid arguments")
-	//Logger - default logger object
-	Logger logger = log.New(os.Stdout, "[DeployCloudPlugin]", log.Lshortfile)
-	//MakeConfigFetcher - function to create the default config fetcher (github oauth)
-	MakeConfigFetcher = func(token, org, repo, branch, url string) (configFetcher *remoteconfig.ConfigFetcher) {
-		configFetcher = &remoteconfig.ConfigFetcher{
-			GithubOauthToken: token,
-			GithubOrg:        org,
-			Repo:             repo,
-			Branch:           branch,
-			GithubURL:        url,
-		}
-		configFetcher.UseOauthClient()
-		return
-	}
-	MakeCmdRunner = func(args ...string) CmdRunner {
-		runner := exec.Command(args[0], args[1:]...)
-		runner.Stdout = os.Stdout
-		runner.Stderr = os.Stderr
-		return runner
-	}
-)
-
-type (
-	CmdRunner interface {
-		Run() error
-	}
-	logger interface {
-		Fatalln(...interface{})
-		Println(...interface{})
-	}
-	//DeployCloudPlugin - deploy cloud plugin object
-	DeployCloudPlugin struct {
-		conn       plugin.CliConnection
-		list       *bool
-		run        *string
-		show       *string
-		org        *string
-		repo       *string
-		branch     *string
-		url        *string
-		token      *string
-		cfuser     *string
-		cfpass     *string
-		configFile *string
-		Errors     []error
-	}
 )
 
 //GetMetadata - cf cli plugin metadata definition
@@ -173,6 +111,7 @@ func (s *DeployCloudPlugin) cfLogin(deploymentInfo remoteconfig.Deployment) {
 func (s *DeployCloudPlugin) cfDeploy(deploymentInfo remoteconfig.Deployment) {
 	args := strings.Split(deploymentInfo.PushCmd, " ")
 	args = append(args, "-f", deploymentInfo.Name)
+	args = ReplaceEnvVars(args)
 
 	if err := MakeCmdRunner(args...).Run(); err != nil {
 		s.appendError(err)
