@@ -25,5 +25,11 @@ build:
         code: |
           (cd $WERCKER_SOURCE_DIR && ./testCoverage ./... $COVERAGE_WATERMARK)
   
-    - tcnksm/goveralls:
-        token: $COVERALLS_TOKEN
+    - script:
+        name: coveralls upload
+        code: |
+          go get github.com/axw/gocov/gocov
+          go get github.com/mattn/goveralls
+          godep go test --covermode=count -coverprofile=profile.cov ./...
+          GIT_BRANCH=$WERCKER_GIT_BRANCH
+          goveralls -coverprofile=profile.cov -service=wercker.com -repotoken $COVERALLS_TOKEN
