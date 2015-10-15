@@ -24,4 +24,6 @@ build:
         name: go test cover
         code: |
           (cd $WERCKER_SOURCE_DIR && ./testCoverage ./... $COVERAGE_WATERMARK)
-
+    
+    - zhevron/goveralls:
+        token: $COVERALLS_TOKEN
