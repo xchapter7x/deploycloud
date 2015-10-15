@@ -4,6 +4,8 @@
 
 [![wercker status](https://app.wercker.com/status/9a6553ba12248db71c8e452c2723e6c3/s/master "wercker status")](https://app.wercker.com/project/bykey/9a6553ba12248db71c8e452c2723e6c3)
 
+[![Coverage Status](https://coveralls.io/repos/xchapter7x/deploycloud/badge.svg?branch=master&service=github)](https://coveralls.io/github/xchapter7x/deploycloud?branch=master)
+
 ## installation from release binaries
 
 **On OSX using release binaries**

@@ -30,6 +30,5 @@ build:
         code: |
           go get github.com/axw/gocov/gocov
           go get github.com/mattn/goveralls
-          godep go test --covermode=count -coverprofile=profile.cov ./...
           GIT_BRANCH=$WERCKER_GIT_BRANCH
-          goveralls -coverprofile=profile.cov -service=wercker.com -repotoken $COVERALLS_TOKEN
+          ./coverage --coveralls
