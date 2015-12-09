@@ -60,13 +60,20 @@ var _ = Describe("DeployCloudPlugin", func() {
 				Logger = myLogger
 				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
 					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
+					contentBytes, _ := ioutil.ReadFile("fixtures/sample_content_res.json")
+					fakeGitClient := &fakes.GithubClientFake{
+						FileBytes: []*bytes.Buffer{
+							bytes.NewBuffer(contentBytes),
+							bytes.NewBuffer(fileBytes),
+						},
+					}
 					config = &remoteconfig.ConfigFetcher{
 						GithubOauthToken: "abcdiasdlhdaglsihdgalsihdgalsidhg",
 						GithubOrg:        "ghorg",
 						Repo:             "myconfigrepo",
 						Branch:           "master",
 						GithubURL:        remoteconfig.DefaultGithubURL,
-						ClientRepo:       &fakes.GithubClientFake{FileBytes: bytes.NewBuffer(fileBytes)},
+						ClientRepo:       fakeGitClient,
 					}
 					return
 				}
@@ -105,13 +112,20 @@ var _ = Describe("DeployCloudPlugin", func() {
 				Logger = myLogger
 				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
 					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
+					contentBytes, _ := ioutil.ReadFile("fixtures/sample_content_res.json")
+					fakeGitClient := &fakes.GithubClientFake{
+						FileBytes: []*bytes.Buffer{
+							bytes.NewBuffer(contentBytes),
+							bytes.NewBuffer(fileBytes),
+						},
+					}
 					config = &remoteconfig.ConfigFetcher{
 						GithubOauthToken: "abcdiasdlhdaglsihdgalsihdgalsidhg",
 						GithubOrg:        "ghorg",
 						Repo:             "myconfigrepo",
 						Branch:           "master",
 						GithubURL:        remoteconfig.DefaultGithubURL,
-						ClientRepo:       &fakes.GithubClientFake{FileBytes: bytes.NewBuffer(fileBytes)},
+						ClientRepo:       fakeGitClient,
 					}
 					return
 				}
@@ -155,13 +169,20 @@ var _ = Describe("DeployCloudPlugin", func() {
 				}
 				MakeConfigFetcher = func(token, org, repo, branch, url string) (config *remoteconfig.ConfigFetcher) {
 					fileBytes, _ := ioutil.ReadFile("fixtures/sample_config.yml")
+					contentBytes, _ := ioutil.ReadFile("fixtures/sample_content_res.json")
+					fakeGitClient := &fakes.GithubClientFake{
+						FileBytes: []*bytes.Buffer{
+							bytes.NewBuffer(contentBytes),
+							bytes.NewBuffer(fileBytes),
+						},
+					}
 					config = &remoteconfig.ConfigFetcher{
 						GithubOauthToken: "abcdiasdlhdaglsihdgalsihdgalsidhg",
 						GithubOrg:        "ghorg",
 						Repo:             "myconfigrepo",
 						Branch:           "master",
 						GithubURL:        remoteconfig.DefaultGithubURL,
-						ClientRepo:       &fakes.GithubClientFake{FileBytes: bytes.NewBuffer(fileBytes)},
+						ClientRepo:       fakeGitClient,
 					}
 					return
 				}

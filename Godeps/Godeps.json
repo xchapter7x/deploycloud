@@ -1,18 +1,18 @@
 {
 	"ImportPath": "github.com/xchapter7x/deploycloud",
-	"GoVersion": "go1.4.2",
+	"GoVersion": "go1.5.2",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/cloudfoundry/cli/plugin",
-			"Comment": "v6.12.2-106-ge8f33b4",
-			"Rev": "e8f33b4524954934da7271a73a7d21331081f13d"
+			"Comment": "v6.13.0-2-g67901d5",
+			"Rev": "67901d5e743d7ce5fc69d3fc4c5b44271deb2bc3"
 		},
 		{
 			"ImportPath": "github.com/google/go-github/github",
-			"Rev": "0d67682ce830f252a1d56215f39b71199036361d"
+			"Rev": "9420d0f48acb838ccf8a7f8dde9eaee19af71132"
 		},
 		{
 			"ImportPath": "github.com/google/go-querystring/query",
@@ -20,25 +20,25 @@
 		},
 		{
 			"ImportPath": "github.com/onsi/ginkgo",
-			"Comment": "v1.2.0-11-gd94e2f4",
-			"Rev": "d94e2f4000332f62b356ecb2840c98f4218f5358"
+			"Comment": "v1.2.0-22-g39d2c24",
+			"Rev": "39d2c24f8a92c88f7e7f4d8ec6c80d3cc8f5ac65"
 		},
 		{
 			"ImportPath": "github.com/onsi/gomega",
-			"Comment": "v1.0-52-ga2ab864",
-			"Rev": "a2ab8644e0b6a33df2cbe44673bd0f6ebba9abc3"
+			"Comment": "v1.0-71-g2152b45",
+			"Rev": "2152b45fa28a361beba9aab0885972323a444e28"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
-			"Rev": "66f0418ca41253f8d1a024eb9754e9441a8e79b9"
+			"Rev": "42ad50856d0131521b13983610e75c16da945ae3"
 		},
 		{
 			"ImportPath": "golang.org/x/oauth2",
-			"Rev": "397fe7649477ff2e8ced8fc0b2696f781e53745a"
+			"Rev": "ef4eca6b097fad7cec79afcc278d213a6de1c960"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
-			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
+			"Rev": "53feefa2559fb8dfa8d81baad31be332c97d6c77"
 		}
 	]
 }

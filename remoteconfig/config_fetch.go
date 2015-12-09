@@ -2,6 +2,7 @@ package remoteconfig
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -23,13 +24,16 @@ func (s *ConfigFetcher) UseOauthClient() {
 //Fetch - executes a remote fetch against the given filepath in the repo
 func (s *ConfigFetcher) Fetch(filePath string) (buf *bytes.Buffer, err error) {
 	var req *http.Request
-	url := s.buildFetchURL(filePath)
+	var url string
 
-	if req, err = s.ClientRepo.NewRequest("GET", url, nil); err == nil {
-		buf = new(bytes.Buffer)
+	if url, err = s.getContentJsonDownloadURL(filePath); err == nil {
 
-		if s.ClientRepo.Do(req, buf); buf.Len() <= 0 {
-			err = errors.New(fmt.Sprintf("empty buffer. make sure the file exists: %s", url))
+		if req, err = s.ClientRepo.NewRequest("GET", url, nil); err == nil {
+			buf = new(bytes.Buffer)
+
+			if s.ClientRepo.Do(req, buf); buf.Len() <= 0 {
+				err = errors.New(fmt.Sprintf("empty buffer. make sure the file exists: %s", url))
+			}
 		}
 	}
 	return
@@ -46,7 +50,26 @@ func (s *ConfigFetcher) FetchConfig() (appD *ApplicationDeployments, err error) 
 	return
 }
 
+func (s *ConfigFetcher) getContentJsonDownloadURL(filePath string) (downloadURL string, err error) {
+	var req *http.Request
+	url := s.buildFetchURL(filePath)
+
+	if req, err = s.ClientRepo.NewRequest("GET", url, nil); err == nil {
+		buf := new(bytes.Buffer)
+
+		if s.ClientRepo.Do(req, buf); buf.Len() <= 0 {
+			err = errors.New(fmt.Sprintf("empty buffer. make sure the file exists: %s", url))
+
+		} else {
+			contentsResponse := GithubContentResponse{}
+			err = json.Unmarshal(buf.Bytes(), &contentsResponse)
+			downloadURL = contentsResponse.DownloadURL
+		}
+	}
+	return
+}
+
 func (s *ConfigFetcher) buildFetchURL(filePath string) (url string) {
-	url = fmt.Sprintf("%s/%s/%s/%s/%s", s.GithubURL, s.GithubOrg, s.Repo, s.Branch, filePath)
+	url = fmt.Sprintf("%s/api/v3/repos/%s/%s/contents/%s?ref=%s", s.GithubURL, s.GithubOrg, s.Repo, filePath, s.Branch)
 	return
 }

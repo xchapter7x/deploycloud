@@ -7,5 +7,7 @@ var (
 
 const (
 	//DefaultGithubURL - the default url for a github repo
-	DefaultGithubURL = "https://raw.github.com"
+	DefaultGithubURL = "https://api.github.com"
+	//DownloadURLElement - element in json response used for file download
+	DownloadURLElement = "download_url"
 )

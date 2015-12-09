@@ -37,4 +37,7 @@ type (
 		Do(req *http.Request, v interface{}) (*github.Response, error)
 		NewRequest(method, urlStr string, body interface{}) (*http.Request, error)
 	}
+	GithubContentResponse struct {
+		DownloadURL string `json:"download_url"`
+	}
 )
