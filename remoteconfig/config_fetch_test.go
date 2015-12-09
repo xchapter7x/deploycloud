@@ -2,6 +2,7 @@ package remoteconfig_test
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 
 	. "github.com/onsi/ginkgo"
@@ -77,7 +78,7 @@ var _ = Describe("ConfigFetcher", func() {
 				}
 			})
 			It("should call the api with a valid url structure", func() {
-				controlUrl := "https://api.github.com/api/v3/repos/ghorg/myconfigrepo/contents/config.yml?ref=master"
+				controlUrl := fmt.Sprintf("%s/repos/ghorg/myconfigrepo/contents/config.yml?ref=master", DefaultGithubURL)
 				fetcher.Fetch("config.yml")
 				Ω(fakeGitClient.SpyUrl[0]).Should(Equal(controlUrl))
 			})

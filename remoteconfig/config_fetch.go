@@ -70,6 +70,6 @@ func (s *ConfigFetcher) getContentJsonDownloadURL(filePath string) (downloadURL 
 }
 
 func (s *ConfigFetcher) buildFetchURL(filePath string) (url string) {
-	url = fmt.Sprintf("%s/api/v3/repos/%s/%s/contents/%s?ref=%s", s.GithubURL, s.GithubOrg, s.Repo, filePath, s.Branch)
+	url = fmt.Sprintf("%s/repos/%s/%s/contents/%s?ref=%s", s.GithubURL, s.GithubOrg, s.Repo, filePath, s.Branch)
 	return
 }
