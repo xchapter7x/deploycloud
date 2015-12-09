@@ -81,6 +81,11 @@ var _ = Describe("ConfigFetcher", func() {
 				fetcher.Fetch("config.yml")
 				Ω(fakeGitClient.SpyUrl[0]).Should(Equal(controlUrl))
 			})
+			It("should yield a valid download url from the json api response", func() {
+				controlUrl := "https://raw.githubusercontent.com/octokit/octokit.rb/master/README.md"
+				fetcher.Fetch("config.yml")
+				Ω(fakeGitClient.SpyUrl[1]).Should(Equal(controlUrl))
+			})
 			It("should return the bytes from the fetched file", func() {
 				byt, err := fetcher.Fetch("config.yml")
 				Ω(err).ShouldNot(HaveOccurred())
