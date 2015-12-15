@@ -25,6 +25,8 @@ build:
         code: |
           (cd $WERCKER_SOURCE_DIR && ./testCoverage ./... $COVERAGE_WATERMARK)
   
+  after-steps:
+    - setup-go-workspace
     - script:
         name: coveralls upload
         code: |

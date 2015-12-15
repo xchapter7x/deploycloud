@@ -210,6 +210,36 @@ var _ = Describe("DeployCloudPlugin", func() {
 				Ω(args).Should(Equal([]string{"login", "-a", "api.pivotal.io", "-u", "asdf", "-p", "asdfasdf", "-o", "myorg", "-s", "thespace"}))
 			})
 
+			Context("when called using the --no-manifest flag", func() {
+				BeforeEach(func() {
+					cliConn = new(cffakes.FakeCliConnection)
+					dcp = new(DeployCloudPlugin)
+					dcp.Run(cliConn, []string{
+						"cloud-deploy",
+						"-run", "myapp1.development",
+						"-org", "asdf",
+						"-repo", "asdf",
+						"-branch", "asdf",
+						"-url", "asdf",
+						"-token", "asdf",
+						"-cfuser", "asdf",
+						"-cfpass", "asdfasdf",
+						"-no-manifest",
+					})
+				})
+				It("then it should not automatically pull in the manifest to the deploy command", func() {
+					Ω(dcp.Errors).Should(BeEmpty())
+					args := fakeCmdRunner.CmdSpy
+					Ω(args).Should(Equal([]string{"push", "appname", "-i", "2"}))
+				})
+			})
+
+			It("then it should run the configured push command w/ added manifest flag and path", func() {
+				Ω(dcp.Errors).Should(BeEmpty())
+				args := fakeCmdRunner.CmdSpy
+				Ω(args).Should(Equal([]string{"push", "appname", "-i", "2", "-f", "development"}))
+			})
+
 			It("then it should run the configured push command w/ added manifest flag and path", func() {
 				Ω(dcp.Errors).Should(BeEmpty())
 				args := fakeCmdRunner.CmdSpy

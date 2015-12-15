@@ -14,6 +14,7 @@ type (
 	DeployCloudPlugin struct {
 		conn       plugin.CliConnection
 		list       *bool
+		nomanifest *bool
 		run        *string
 		show       *string
 		org        *string

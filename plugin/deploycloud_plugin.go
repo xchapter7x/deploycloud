@@ -33,6 +33,7 @@ func (s *DeployCloudPlugin) Run(cliConnection plugin.CliConnection, args []strin
 	fs := new(flag.FlagSet)
 	s.conn = cliConnection
 	s.list = fs.Bool("list", false, "list apps available in config file")
+	s.nomanifest = fs.Bool("no-manifest", false, "do not automatically add the manifest ex.`-f manifest.yml`	to the deploy call")
 	s.run = fs.String("run", "", "run the selected deployment")
 	s.show = fs.String("show", "", "show the selected deployment's details")
 	s.configFile = fs.String("config", remoteconfig.DefaultConfigPath, "path to remote config file")
@@ -110,7 +111,10 @@ func (s *DeployCloudPlugin) cfLogin(deploymentInfo remoteconfig.Deployment) {
 
 func (s *DeployCloudPlugin) cfDeploy(deploymentInfo remoteconfig.Deployment) {
 	args := strings.Split(deploymentInfo.PushCmd, " ")
-	args = append(args, "-f", deploymentInfo.Name)
+
+	if !*s.nomanifest {
+		args = append(args, "-f", deploymentInfo.Name)
+	}
 	args = ReplaceEnvVars(args)
 
 	if err := MakeCmdRunner(args...).Run(); err != nil {
