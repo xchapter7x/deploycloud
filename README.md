@@ -55,6 +55,7 @@ $ cf install-plugin $env:GOPATH/bin/deploycloud.exe
 	--token "the oauth token for your github account (uses GH_TOKEN Env var by default)"
 	--cfuser "the cf username to use when logging in to the deployment target (uses CF_USER Env var by default)"
 	--cfpass "the cf user's password to use when logging in to the deployment target (uses CF_PASS Env var by default)"
+	--no-manifest "allows the user to not have the plugin auto append a `-f <manifest.yml>` to the given command
 ```
 
 **sample calls**
